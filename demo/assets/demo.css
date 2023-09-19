@@ -1,0 +1,31 @@
+@font-face {
+    font-family: 'MV Faseyha';
+    src: url('./mv_faseyha.otf') format('opentype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+body {
+    font-family: 'MV Faseyha', sans-serif;
+    font-size: 1.3rem;
+    direction: rtl;
+    line-height: 1.9;
+}
+
+article {
+    margin: 0 auto;
+    max-width: 748px;
+}
+
+p {
+    margin-bottom: 2rem;
+}
+
+img {
+    max-width: 100%;
+}
+
+.caption {
+    color: #7f7f7f;
+    font-size: 1rem;
+}
