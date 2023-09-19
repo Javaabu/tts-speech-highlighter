@@ -12,7 +12,7 @@ body {
     line-height: 1.9;
 }
 
-article {
+main {
     margin: 0 auto;
     max-width: 748px;
 }
@@ -23,6 +23,10 @@ p {
 
 img {
     max-width: 100%;
+}
+
+audio {
+    width: 100%;
 }
 
 .caption {
