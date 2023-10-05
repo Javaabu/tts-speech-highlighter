@@ -1,0 +1,21 @@
+/**
+ * TTS Highlighter Audio Read-Along
+ * @author Arushad Ahmed, Javaabu
+ * @license MIT
+ * https://github.com/Javaabu/tts-speech-highlighter
+ */
+
+.tts-initialized span[data-begin] {
+    cursor: pointer;
+}
+
+.tts-initialized span[data-begin].speaking {
+    background-color: yellow;
+    box-shadow: 0px 0px 4px yellow;
+}
+
+.tts-initialized span[data-begin]:focus,
+.tts-initialized span[data-begin]:hover {
+    background-color: #FFFFCA;
+    box-shadow: 0px 0px 4px #FFFFCA;
+}

@@ -9,7 +9,7 @@ var TtsHighlighter = {
     audio_element: null,
     marks_file: null,
     autofocus_current_word: true,
-
+    marks: [],
     words: [],
 
     init: function (args) {
@@ -17,9 +17,65 @@ var TtsHighlighter = {
         for (name in args) {
             this[name] = args[name];
         }
-        //this.generateWordList();
-        //this.addEventListeners();
-        //this.selectCurrentWord();
+
+        this.loadWordsList();
+        this.insertMarkTags();
+        this.generateWordList();
+        this.addEventListeners();
+        this.selectCurrentWord();
+        this.markAsInitialized();
+    },
+
+    /**
+     * Load the timestamps from the marks file
+     */
+    loadWordsList: function () {
+        var request= new XMLHttpRequest();
+        request.open('GET', this.marks_file, false);
+        request.send();
+
+        if (request.status === 200 && request.readyState === 4) {
+            this.marks = JSON.parse(request.responseText);
+        } else {
+            throw Error('Unable to load marks file.');
+        }
+    },
+
+    /**
+     * Insert the span tags
+     */
+    insertMarkTags: function () {
+        // get the text content
+        var remaining_text = this.text_element.innerHTML;
+        var processed_text = '';
+
+        for (var i = 0; i < this.marks.length; i++) {
+            // get the word
+            var utterance = this.marks[i];
+            var word = utterance.text;
+
+            // find the index of the word
+            var index = remaining_text.indexOf(word);
+
+            // insert the tag
+            if (index >= 0) {
+                processed_text += remaining_text.substring(0, index)
+                    + '<span data-dur="' + utterance.duration + '" data-begin="' + utterance.start + '" data-index="' + i + '">'
+                    + remaining_text.substring(index, index + word.length)
+                    + '</span>';
+
+                remaining_text = remaining_text.substring(index + word.length);
+            }
+        }
+
+        this.text_element.innerHTML = processed_text;
+    },
+
+    /**
+     * Mark as initialized
+     */
+    markAsInitialized: function () {
+        this.text_element.classList.add('tts-initialized');
     },
 
     /**

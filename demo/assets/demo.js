@@ -4,7 +4,8 @@ window.addEventListener('load', function (e) {
         var args = {
             text_element: document.getElementById('passage-text'),
             audio_element: document.getElementById('passage-audio'),
-            autofocus_current_word: document.getElementById('autofocus-current-word').checked
+            autofocus_current_word: document.getElementById('autofocus-current-word').checked,
+            marks_file: './assets/mihaaru.json'
         };
 
         if (!args.audio_element.canPlayType) {
@@ -57,5 +58,4 @@ window.addEventListener('load', function (e) {
     catch (err) {
         console.error(err);
     }
-    document.body.classList.add('initialized');
 }, false);
