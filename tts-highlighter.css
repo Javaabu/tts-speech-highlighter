@@ -5,6 +5,11 @@
  * https://github.com/Javaabu/tts-speech-highlighter
  */
 
+.tts-initialized span[data-sent].speaking {
+    background-color: #CAFFCA;
+    box-shadow: 0px 0px 4px #CAFFCA;
+}
+
 .tts-initialized span[data-begin] {
     cursor: pointer;
 }

@@ -19,6 +19,7 @@ var TtsHighlighter = {
         }
 
         this.loadWordsList();
+        this.insertSentenceTags();
         this.insertMarkTags();
         this.generateWordList();
         this.addEventListeners();
@@ -42,16 +43,48 @@ var TtsHighlighter = {
     },
 
     /**
+     * Insert the sentence tags
+     */
+    insertSentenceTags: function () {
+        // get the text content
+        var remaining_text = this.text_element.innerHTML;
+        var processed_text = '';
+        var sentences = this.marks.sentences;
+
+        for (var i = 0; i < sentences.length; i++) {
+            // get the word
+            var utterance = sentences[i];
+            var word = utterance.text;
+
+            // find the index of the word
+            var index = remaining_text.indexOf(word);
+
+            // insert the tag
+            if (index >= 0) {
+                processed_text += remaining_text.substring(0, index)
+                    + '<span data-sent="' + i + '">'
+                    + remaining_text.substring(index, index + word.length)
+                    + '</span>';
+
+                remaining_text = remaining_text.substring(index + word.length);
+            }
+        }
+
+        this.text_element.innerHTML = processed_text;
+    },
+
+    /**
      * Insert the span tags
      */
     insertMarkTags: function () {
         // get the text content
         var remaining_text = this.text_element.innerHTML;
         var processed_text = '';
+        var words = this.marks.words;
 
-        for (var i = 0; i < this.marks.length; i++) {
+        for (var i = 0; i < words.length; i++) {
             // get the word
-            var utterance = this.marks[i];
+            var utterance = words[i];
             var word = utterance.text;
 
             // find the index of the word
@@ -139,6 +172,7 @@ var TtsHighlighter = {
         var that = this;
         var current_word = this.getCurrentWord();
         var is_playing = !this.audio_element.paused;
+        var current_sentence = current_word.element.closest('[data-sent]');
 
         if (!current_word.element.classList.contains('speaking')) {
             this.removeWordSelection();
@@ -146,6 +180,10 @@ var TtsHighlighter = {
             if (this.autofocus_current_word) {
                 current_word.element.focus();
             }
+        }
+
+        if (current_sentence && (! current_sentence.classList.contains('speaking'))) {
+            current_sentence.classList.add('speaking');
         }
 
         /**
@@ -165,6 +203,10 @@ var TtsHighlighter = {
                 function () {
                     if (!that.audio_element.paused) { // we always want to have a word selected while paused
                         current_word.element.classList.remove('speaking');
+
+                        /*if (current_sentence) {
+                            current_sentence.classList.remove('speaking');
+                        }*/
                     }
                 },
                 Math.max(seconds_until_this_word_ends * 1000, 0)
@@ -196,6 +238,12 @@ var TtsHighlighter = {
         var spoken_word_els = this.text_element.querySelectorAll('span[data-begin].speaking');
         Array.prototype.forEach.call(spoken_word_els, function (spoken_word_el) {
             spoken_word_el.classList.remove('speaking');
+        });
+
+        // There should only be one sentence element with .speaking, but selecting all for good measure
+        var spoken_sentence_els = this.text_element.querySelectorAll('span[data-sent].speaking');
+        Array.prototype.forEach.call(spoken_sentence_els, function (spoken_sentence_el) {
+            spoken_sentence_el.classList.remove('speaking');
         });
     },
 
