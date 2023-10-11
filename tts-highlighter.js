@@ -53,20 +53,19 @@ var TtsHighlighter = {
 
         for (var i = 0; i < sentences.length; i++) {
             // get the word
-            var utterance = sentences[i];
-            var word = utterance.text;
+            var sentence = sentences[i];
 
             // find the index of the word
-            var index = remaining_text.indexOf(word);
+            var index = remaining_text.indexOf(sentence);
 
             // insert the tag
             if (index >= 0) {
                 processed_text += remaining_text.substring(0, index)
                     + '<span data-sent="' + i + '">'
-                    + remaining_text.substring(index, index + word.length)
+                    + remaining_text.substring(index, index + sentence.length)
                     + '</span>';
 
-                remaining_text = remaining_text.substring(index + word.length);
+                remaining_text = remaining_text.substring(index + sentence.length);
             }
         }
 
