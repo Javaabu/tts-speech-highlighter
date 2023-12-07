@@ -69,7 +69,7 @@ var TtsHighlighter = {
             }
         }
 
-        this.text_element.innerHTML = processed_text;
+        this.text_element.innerHTML = processed_text + remaining_text;
     },
 
     /**
